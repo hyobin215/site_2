@@ -7,14 +7,14 @@ $main : #20bec6;
 html{ font-family: "Montserrat", 'NanumBarunGothic', sans-serif;
     font-size:12px;}
 
-body{background:#333; line-height:1.6; height:3000px;}
+body{line-height:1.6;}
     //1.6 : 각 영역별 적용된 글자 크기에 비례하여 1.6배를 적용
     //1.6em : body의 글자크기(12px)에 비례하여 1.6배인 19.2px이 적용
 a{display:inline-block; text-decoration:none; color:inherit;}
 
 header{
     position:fixed; width:100%; padding:20px 0; color:#fff;
-    transition:all .3s ease-in-out;
+    transition:all .3s ease-in-out; z-index:100;
     .inner{padding:0 100px;}
     a:hover{color:$main;}
     #logo{
@@ -58,12 +58,83 @@ header{
 }//end:#sns
 
 #main_view{
+    overflow:hidden; background:#000; position:relative;
     .slider{
         display:flex;
         .view{width:100%; height:100vh; flex-shrink:0;
-            background:center/cover no-repeat;}
+            background:center/cover no-repeat; position:relative;}
+        .view::before{content:''; position:absolute; opacity:.5;
+            top:0; left:0; right:0; bottom:0; background:#000;}
         @for $i from 1 through 6{//1~6
             .view#{$i}{background-image:url("../images/view0"+$i+".jpg");}
         }
+        .text{
+            color:#fff; position:absolute; bottom:120px; left:120px;
+            transform:translateY(50px); opacity:0;
+            transition:all .5s ease-in-out;
+            h3{font-size:50px; line-height:1.1; font-weight:300;}
+            p{font-size:18px; padding:20px 0; margin-bottom:10px;}
+            a{width:150px; height:50px; line-height:50px;
+                text-align:center; font-size:14px; border:1px solid #fff;}
+            a:hover{background:#fff; color:#000;}
+            i{display:inline-block; vertical-align:-1px; padding-left:6px;}
+        }//end:.text
+        .swiper-slide-active .text{opacity:1;
+            transform:translateY(0); transition-delay:.6s;} 
     }//end:.slider
+    .pager{
+        position:absolute; z-index:10; bottom:16px; left:50%;
+        transform:translateX(-50%);
+        span{display:block; float:left; width:6px; height:6px;
+            margin:0 5px; border-radius:50%; border:1px solid #fff;
+            cursor:pointer;}
+        span.active{background:#fff;}
+    }//end:.pager
 }//end:#main_view
+
+#works{
+    padding-bottom:100px; border-bottom:1px solid #eee;
+    h3{margin:50px 120px; font-size:20px; font-weight:bold;}
+    h3 a:hover{text-decoration:underline;}
+    .list{
+        display:flex; flex-wrap:wrap;
+        li{background:#000; border:1px solid #fff; box-sizing:border-box;
+            /*flex-grow:커지는 비율; flex-shrink:작아지는 비율; flex-basis:너비;*/
+            flex:0 0 25%; overflow:hidden; position:relative;}
+        li::before{content:'';display:block; padding-bottom:56%;
+            background:center center/cover no-repeat; opacity:.5;
+            transition:all .2s ease-in-out;}
+        li:hover::before{transform:scale(1.12,1.12); opacity:1;}
+        /*
+            li:nth-child(1)::before{
+            background-image:url("../images/works/work01.jpg");}
+            li:nth-child(2)::before{
+            background-image:url("../images/works/work02.jpg");}
+            li:nth-child(3)::before{
+            background-image:url("../images/works/work04.jpg");}
+            .....
+        */
+        @for $i from 1 through 12{
+            li:nth-child(#{$i})::before{
+                @if($i<10){
+                    background-image:url("../images/works/work0"+$i+".jpg");
+                }@else{
+                    background-image:url("../images/works/work"+$i+".jpg");
+                }
+            }
+        }//end:@for
+        a{position:absolute; top:0; left:0; width:100%; height:100%;
+            color:#fff;}
+        h4{position:absolute; left:20px; bottom:30px; font-size:18px;
+            letter-spacing:-1px; width:90%; white-space:nowrap;
+            overflow:hidden; text-overflow:ellipsis;
+            transition:all .3s ease-in-out; font-weight:bold;}
+        a:hover h4{bottom:41px;}
+        p{position:absolute; left:20px; bottom:15px;}
+        i{margin-right:4px;}
+    }//end:.list
+    .more{display:block; margin:50px auto 0; width:200px;
+        height:50px; line-height:50px; text-align:center;
+        color:#222; font-size:16px; border:1px solid #222;}
+    .more:hover{background:#222; color:#fff;}
+}//end:#works
